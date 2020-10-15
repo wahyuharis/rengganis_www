@@ -1,0 +1,124 @@
+#title{
+    margin-left: 20px;
+}
+#menu-top{
+    width: 40px;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1500;
+    top: 0px;
+    left: 0;
+    background-color: #007bff;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    /*text-align:center;*/
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #fff;
+    display: block;
+    transition: 0.3s;
+
+}
+
+.sidenav a:hover{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.cart-btn{
+    border-radius: 50px;
+    height: 60px;
+    width: 60px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.produk-row{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow:1px 5px 10px 1px rgb(233 236 239);
+}
+
+.filter-produk{
+    position: fixed;
+    width: 100%;
+    top: 55px;
+    left: 0;
+    background-color: #ffffff;
+    z-index: 200;
+    padding: 10px 10px 0px 10px;
+}
+
+.cart-list{
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    padding-top: 70px;
+}
+
+.modal-dialog{
+    margin: 0px;
+    height: 100%;
+}
+
+.modal-content{
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius:0px;
+}
+.loading{
+    position: fixed;
+    top: 30%;
+    left: 45%;
+    z-index: 333;
+    color: #4b52599e;
+}
+
+.form-control::-webkit-input-placeholder { color: #343a40; }  /* WebKit, Blink, Edge */
+.form-control:-moz-placeholder { color: #343a40; }  /* Mozilla Firefox 4 to 18 */
+.form-control::-moz-placeholder { color: #343a40; }  /* Mozilla Firefox 19+ */
+.form-control:-ms-input-placeholder { color: #343a40; }  /* Internet Explorer 10-11 */
+.form-control::-ms-input-placeholder { color: #343a40; }  /* Microsoft Edge */
+
+.toast {
+    opacity: 1 !important;
+}
+
+@media (min-width: 576px){
+    .modal-dialog {
+        max-width: 100%;
+        margin: 0;
+    }
+}

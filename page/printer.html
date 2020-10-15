@@ -1,0 +1,98 @@
+<h4>Setting Printer</h4>
+<p>Tap Salah satu printer dibawah untuk menentukan printer yang akan digunakan</p>
+<button id="scan_printer" class="btn btn-primary">Refresh</button>
+<br>
+<div id="printer_list"  >
+</div>
+
+<pre id="console">
+</pre>
+
+
+<script>
+    $('#printer_list').ready(function () {
+        scan_print();
+        $('#scan_printer').click(function () {
+            scan_print();
+        });
+    });
+
+
+    function scan_print() {
+        BTPrinter.list(function (data) {
+            var printer_name = '';
+            var i2 = 0;
+            $('#printer_list').html('');
+            for (var i = 0; i < data.length; i++) {
+                i2 = i + 1;
+                if (i2 % 3 == 1) {
+                    printer_list(data[i]);
+                }
+            }
+        }, function (err) {
+            alert('pair dulu ke bluetooth');
+        });
+    }
+
+
+    function printer_list(name) {
+        var html = '<button type="button" onclick="cetak(' + "'" + name + "'" + ')"'
+                + ' class="btn btn-outline-primary btn-block active">' + name + '</button>';
+        $('#printer_list').append(html);
+
+    }
+
+    function cetak(name) {
+        $('#console').html('');
+        var string_to_print = "String to Print\n";
+        BTPrinter.connect(function (data) {
+            myconsole("Connect Success");
+            myconsole(data);
+
+            BTPrinter.printText(function (data) {
+                myconsole("Success");
+                myconsole(data)
+                
+                set_printer(name);
+
+                BTPrinter.disconnect(function (data) {
+                    myconsole("Disconnect Success");
+                    myconsole.log(data)
+                }, function (err) {
+                    myconsole("Error");
+                    myconsole(err)
+                }, name);
+
+            }, function (err) {
+                myconsole("Error");
+                myconsole(err);
+
+                BTPrinter.disconnect(function (data) {
+                    myconsole("Disconnect Success");
+                    myconsole.log(data)
+                }, function (err) {
+                    myconsole("Error");
+                    myconsole(err)
+                }, name);
+
+            }, string_to_print);
+        }, function (err) {
+            myconsole("Error");
+            myconsole(err)
+        }, name);
+    }
+
+
+    function myconsole(text) {
+        $('#console').append(text + "\n");
+    }
+    
+    function set_printer(name){
+        localStorage.setItem('default_printer',name);
+        
+        var setted=localStorage.getItem('default_printer');
+        
+        alert("Printer Yang Digunakan Seterusnya "+setted);
+    }
+</script>
+
