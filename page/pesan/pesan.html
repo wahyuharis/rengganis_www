@@ -1,0 +1,198 @@
+<div id="modul_pesan" >
+    <div class="row">
+        <div class="col-sm-12" style="height: 10px" ></div>
+        <div class="col-sm-12" >
+            <div class="filter-produk">
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend" data-bind="click: clear_nama_produk" >
+                            <span class="input-group-text"><i class="fa fa-refresh"></i></span>
+                        </div>
+                        <input id="nama_produk" data-bind="textInput: nama_produk,event: {'keyup': cari_produk }" type="text" class="form-control" placeholder="Cari Produk">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend"  data-bind="click: clear_id_kategori" >
+                            <span class="input-group-text"> <i class="fa fa-refresh"></i></span>
+                        </div>
+                        <select id="id_kategori" class="form-control" data-bind="value: id_kategori,
+                                            options: opt_kategori,
+                                            optionsText:'nama_kategori',
+                                            optionsValue:'id_kategori',
+                                            valueAllowUnset:true,
+                                            event: {'change':cari_produk}" >
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12" style="height: 90px;" ></div>
+    </div>
+
+    <div class="row" data-bind="foreach: produk_list">
+        <div class="col-sm-12 produk-row">
+            <div class="row">
+                <div class="col-4">
+                    <img src="#" data-bind="attr: {'src':foto}"  class="img-fluid">
+                </div>
+                <div class="col-8">
+                    <h5 data-bind="text: nama_produk" >Nama Produk</h5>
+                    <p> <span class="text-secondary" data-bind="text:sku" ></span></p>
+                    <p class="text-danger">Rp <span data-bind="text:harga_format" ></span></p>
+                    <button data-bind="click: $root.cart_add" class="btn btn-primary btn-sm" ><i class="fa fa-cart-plus" ></i>
+                        Tambah ke Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pagination-detect" style="height: 50px;text-align: center" data-bind="visible: produk_list().length > 0" >
+        <i id="pagination-loading" style="display: none"  class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="cart-btn" class="btn btn-primary btn-lg cart-btn" 
+                    data-toggle="tooltip" data-placement="top" title="Produk telah ditambahkan"
+                    ><i class="fa fa-shopping-cart"></i>
+                <span class="badge badge-danger" data-bind="visible: qount_cart()>0 ,text:qount_cart" ></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cart-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Cart</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row"  data-bind="foreach:cart" >
+                        <div class="col-12">
+                            <div class="row mb-2 border-bottom">
+                                <div class="col-3">
+                                    <img src="#" data-bind="attr: {'src':foto}"  class="img-fluid">
+                                </div>
+                                <div class="col-7">
+                                    <p> <span data-bind="text: nama_produk" ></span> </p>
+                                    <p> <span class="text-danger" data-bind="text: total" ></span></p>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <div class="input-group-prepend">
+                                            <span data-bind="click: $root.minus_qty" class="btn btn-warning" ><i class="fa fa-minus"></i></span>
+                                        </div>
+                                        <input class="form-control number" type="text" data-bind="textInput: qty" >
+                                        <div class="input-group-prepend">
+                                            <span data-bind="click: $root.plus_qty" class="btn btn-success" ><i class="fa fa-plus"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2">
+                                        <div class="col-12" >
+                                            <div class="form-check" >
+                                                <input data-bind="checked: harga_disc,attr: {'id':id_element}" class="form-check-input" type="checkbox" >
+                                                <label class="form-check-label"  data-bind="attr: {'for':id_element}" >
+                                                    Harga & Diskon
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div data-bind="visible: harga_disc" class="input-group input-group-sm mb-1">
+                                        <div class="input-group-prepend">
+                                            <span style="
+                                                  width: 35px;
+                                                  " class="input-group-text" > <b>@</b> </span>
+                                        </div>
+                                        <input class="form-control thousand" type="text" data-bind="textInput:harga_produk" >
+                                    </div>
+                                    <div data-bind="visible: harga_disc" class="input-group input-group-sm mb-1">
+                                        <div class="input-group-prepend">
+                                            <span style="
+                                                  width: 35px;
+                                                  " class="input-group-text" > <b> % </b> </span>
+                                        </div>
+                                        <input class="form-control number" type="text" data-bind="textInput:disc" >
+                                    </div>
+
+                                </div>
+                                <div class="col-2">
+                                    <span data-bind="click: $root.delete_cart" class="mt-2 btn btn-outline-danger btn-sm"><i class="fa fa-trash" ></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" >
+                        <div class="col-12" style="text-align: center" >
+                            <h5>Belum Ada Produk Ditambahkan</h5>
+                        </div>
+                    </div>
+
+
+                    <div class="row" >
+                        <div class="col-12" >
+                            <table class="table table-striped mt-2" data-bind="visible: cart().length>0" >
+                                <tbody>
+                                    <tr>
+                                        <td>Sub</td>
+                                        <td>:</td>
+                                        <td class="text-right text-danger"> <span data-bind="text: sub_total" ></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Diskon</td>
+                                        <td> : </td>
+                                        <td class="text-right text-danger"> <span data-bind="text: disc_total" ></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td> : </td>
+                                        <td class="text-right text-danger"> <span data-bind="text: total_all" ></span> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer" id="modal-swipe-up">
+                    <div class="row" >
+                        <div class="col-12 form-group" >
+                            <label for="cart_add_show"><b>Jangan Tampil Lagi </b> </label>
+                            <input id='cart_add_show' type="checkbox" data-bind="checked: cart_dont_show_again"   >
+                        </div>
+                        <div class="col-12">
+                            <button id="proses_pesanan" type="button" class="btn btn-primary">Proses Pesanan</button>
+                            <button type="button" class="btn btn-outline-primary float-right" data-dismiss="modal" >Tambah Lagi</button>
+                        </div>
+                        <div class="col-12 border-top text-center" style="padding: 0px;margin-top: 10px" >
+                            <i class="fa fa-angle-double-up" ></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <textarea style="display: none" id="daftar_pesanan" data-bind="value:ko.toJSON($root)"></textarea>
+</div>
+<script src="page/pesan/pesan.js" ></script>

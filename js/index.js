@@ -5,6 +5,18 @@ $(document).ready(function () {
 
 });
 
+function init_localstorage() {
+    var hostname = 'http://192.168.1.5/rengganis_api/';
+    var hostname_foto = 'http://192.168.1.5/rengganis/uploads/';
+    var username = 'kasir';
+    var password = 'kasir';
+
+    localStorage.setItem('hostname', hostname);
+    localStorage.setItem('hostname_foto', hostname_foto);
+    localStorage.setItem('username', username);
+    localStorage.setItem('password', password);
+}
+
 
 
 function onDeviceReady() {
@@ -49,7 +61,7 @@ function onDeviceReady() {
         menu_item = $(this);
 
         if (!menu_item.hasClass('active')) {
-            $.get('page/pesan.html', function (data) {
+            $.get('page/pesan/pesan.html', function (data) {
                 $('#content').html(data);
             });
         }
@@ -84,27 +96,17 @@ toastr.options = {
   "positionClass": "toast-top-full-width",
   "preventDuplicates": false,
   "onclick": null,
-  "showDuration": "300",
-  "hideDuration": "1000",
-  "timeOut": "5000",
-  "extendedTimeOut": "1000",
+  "showDuration": "0",
+  "hideDuration": "0",
+  "timeOut": "0",
+  "extendedTimeOut": "0",
   "showEasing": "swing",
   "hideEasing": "linear",
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut"
 }
 
-function init_localstorage() {
-    var hostname = 'http://192.168.1.102/rengganis_api/';
-    var hostname_foto = 'http://192.168.1.102/rengganis/uploads/';
-    var username = 'kasir';
-    var password = 'kasir';
 
-    localStorage.setItem('hostname', hostname);
-    localStorage.setItem('hostname_foto', hostname_foto);
-    localStorage.setItem('username', username);
-    localStorage.setItem('password', password);
-}
 
 
 function openNav() {

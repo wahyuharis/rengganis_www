@@ -9,6 +9,7 @@
         <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
         <!--<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />-->
 
+
         <title>Rengganis WWW</title>
         <link href="bootstrap-4.0.0/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
@@ -19,18 +20,19 @@
         <!--<script src="cordova.js"></script>-->
         <script src="jquery/jquery.min.js" type="text/javascript"></script>
         <script src="bootstrap-4.0.0/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+        <script src="jquery.inview-master/jquery.inview.min.js" type="text/javascript"></script>
         <script src="numeral/min/numeral.min.js" type="text/javascript"></script>
         <script src="js/curruency.js" type="text/javascript"></script>
         <script src="toastr/build/toastr.min.js" type="text/javascript"></script>
         <script src="js/hammer.min.js" type="text/javascript"></script>
         <script src="knockout/knockout-3.5.1.js" type="text/javascript"></script>
-        <script src="js/index.js"></script>
+        <script src="js/index.js?disable_cache=true"></script>
     </head>
     <body>
 
         <nav class="navbar navbar-dark bg-primary fixed-top">
             <span class="navbar-brand"  >
-                <span id="menu-top" onclick="openNav()" class="fa fa-align-justify"></span>
+                <span id="menu-top" onclick="openNav()" class="fa fa-navicon"></span>
                 <span id="title">Rengganis Pos</span>
             </span>
         </nav>
@@ -38,9 +40,8 @@
         <div id="mySidenav" class="sidenav">
             <div id="menu-container" style="display: none">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a id="pesan" href="#">Pemesanan</a>
-                <a id="tagihan" href="#">Tagihan</a>
-                <a href="#">History Transaksi</a>
+                <a id="pesan" href="#">Transaksi</a>
+                <a id="tagihan" href="#">History Transaksi</a>
                 <a href="#">Kas Masuk</a>
                 <a href="#">Kas Keluar</a>
                 <a id="printer" href="#">Setting Printer</a>
@@ -52,6 +53,7 @@
         <div class="container" id="content" >
 
         </div>
+        <i id="loading" style="display: none" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw loading"></i>
 
     </body>
 </html>
