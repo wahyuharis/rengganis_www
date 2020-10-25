@@ -30,6 +30,25 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="nama_customer" class="label2" >Nama Customer</label>
+                    <input type="text"  data-bind="value:nama_customer"  class="form-control form-control-sm form-control-underline" placeholder="Nama Customer" id="nama_customer">
+                </div> 
+                
+                <div class="form-group">
+                    <label for="whatsapp" class="label2" >Whatsapp</label>
+                    <input type="text"  data-bind="value:whatsapp"  inputmode="tel"  class="form-control form-control-sm form-control-underline" placeholder="Whatsapp"  id="whatsapp">
+                    <!--                    <p class="text-dark text-small" > <i class="text-danger" >*</i> 
+                                            No whatsapp digunakan jika ingin mengirim bill via whatsapp</p>-->
+                </div>
+  
+
+                <div class="form-group">
+                    <label for="total_all" class="label2" >Tagihan</label>
+                    <input readonly="" data-bind="value: total_all" type="text" inputmode="numeric" class="form-control form-control-sm form-control-underline font-weight-bold text-right thousand"  >
+                </div> 
+                
+                
+                <div class="form-group">
                     <div for="id_rekening" class="select-placeholder-underline" >Bayar Via... </div>
                     <label for="id_rekening" class="label2" >Bayar Via</label>
                     <select id="id_rekening"  class="form-control form-control-sm form-control-underline" data-bind="value: id_rekening,
@@ -47,23 +66,6 @@
                         });
                     </script>
                 </div>
-                <div class="form-group">
-                    <label for="nama_customer" class="label2" >Nama Customer</label>
-                    <input type="text"  data-bind="value:nama_customer"  class="form-control form-control-sm form-control-underline" placeholder="Nama Customer" id="nama_customer">
-                </div> 
-                
-                <div class="form-group">
-                    <label for="whatsapp" class="label2" >Whatsapp</label>
-                    <input type="text"  data-bind="value:whatsapp"  inputmode="tel"  class="form-control form-control-sm form-control-underline" placeholder="Whatsapp"  id="whatsapp">
-                    <!--                    <p class="text-dark text-small" > <i class="text-danger" >*</i> 
-                                            No whatsapp digunakan jika ingin mengirim bill via whatsapp</p>-->
-                </div>
-  
-
-                <div class="form-group">
-                    <label for="total_all" class="label2" >Tagihan</label>
-                    <input readonly="" data-bind="value: total_all" type="text" inputmode="numeric" class="form-control form-control-sm form-control-underline font-weight-bold text-right thousand"  >
-                </div> 
 
                 <div class="form-group">
                     <label for="bayar" class="label2" >Bayar</label>
@@ -78,8 +80,6 @@
                         <span data-bind="click: f_uang_50" class="btn mb-1   btn-sm btn-primary" >50,000</span>
                         <span data-bind="click: f_uang_100" class="btn mb-1   btn-sm btn-primary" >100,000</span>
                     </div>
-                    
-
                 </div>  
 
                 <div class="form-group">
