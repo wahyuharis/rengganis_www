@@ -13,13 +13,19 @@ function float_to_currency(floatval) {
 function format() {
     $('.thousand').each(function () {
         num = $(this).val();
-        num = numeral(num).format();
+        num = numeral(num).format('0,0.00');
         $(this).val(num);
     });
 
     $('.thousand').keyup(function () {
         num = $(this).val();
         num = numeral(num).format();
+        $(this).val(num);
+    });
+    
+    $('.thousand').focusout(function () {
+        num = $(this).val();
+        num = numeral(num).format('0,0.00');
         $(this).val(num);
     });
 

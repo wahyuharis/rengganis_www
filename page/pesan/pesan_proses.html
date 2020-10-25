@@ -1,31 +1,277 @@
 <div id="daftar_pesanan">
-    <h1>Detail Transaksi</h1>
+    <div class="row">
+        <div class="col-12 mb-2 mt-2 text-center">
+            <h5><b>Bill</b></h5>
+        </div>
+        <div class="col-12 border-bottom mb-2" ></div>
+    </div>
+
     <div class="row" >
         <div class="col-12" >
-            <form action="#">
+            <form action="#" class="mb-3">
+                <div class="form-group" style="display: none"  >
+                    <div for="id_meja" class="select-placeholder-underline" >Nomor Meja... </div>
+                    <label for="id_meja" class="label2" >Nomor Meja</label>
+                    <select id="id_meja"  class="form-control form-control-underline" data-bind="value: id_meja,
+                                            options: opt_meja,
+                                            optionsText:'nomor_meja',
+                                            optionsValue:'id_meja',
+                                            valueAllowUnset:true" >
+                    </select>
+                    <script>
+                        $('#id_meja').change(function () {
+//                            console.log('cange');
+                            var val = $('#id_meja').val();
+                            if (val.length > 0) {
+                                $('.select-placeholder-underline[for=id_meja]').hide();
+                            }
+                        });
+                    </script>
+                </div>
+
                 <div class="form-group">
-                    <label for="email">Email address:</label>
-                    <input type="email" class="form-control" placeholder="Enter email" id="email">
+                    <div for="id_rekening" class="select-placeholder-underline" >Bayar Via... </div>
+                    <label for="id_rekening" class="label2" >Bayar Via</label>
+                    <select id="id_rekening"  class="form-control form-control-sm form-control-underline" data-bind="value: id_rekening,
+                                            options: opt_rekening,
+                                            optionsText:'nama_rekening',
+                                            optionsValue:'id_rekening',
+                                            valueAllowUnset:true" >
+                    </select>
+                    <script>
+                        $('#id_rekening').change(function () {
+                            var val = $('#id_rekening').val();
+                            if (val.length > 0) {
+                                $('.select-placeholder-underline[for=id_rekening]').hide();
+                            }
+                        });
+                    </script>
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" placeholder="Enter password" id="pwd">
+                    <label for="nama_customer" class="label2" >Nama Customer</label>
+                    <input type="text"  data-bind="value:nama_customer"  class="form-control form-control-sm form-control-underline" placeholder="Nama Customer" id="nama_customer">
+                </div> 
+                
+                <div class="form-group">
+                    <label for="whatsapp" class="label2" >Whatsapp</label>
+                    <input type="text"  data-bind="value:whatsapp"  inputmode="tel"  class="form-control form-control-sm form-control-underline" placeholder="Whatsapp"  id="whatsapp">
+                    <!--                    <p class="text-dark text-small" > <i class="text-danger" >*</i> 
+                                            No whatsapp digunakan jika ingin mengirim bill via whatsapp</p>-->
                 </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox"> Remember me
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+  
+
+                <div class="form-group">
+                    <label for="total_all" class="label2" >Tagihan</label>
+                    <input readonly="" data-bind="value: total_all" type="text" inputmode="numeric" class="form-control form-control-sm form-control-underline font-weight-bold text-right thousand"  >
+                </div> 
+
+                <div class="form-group">
+                    <label for="bayar" class="label2" >Bayar</label>
+                    <input id="bayar" data-bind="textInput:  bayar,
+                            hasFocus:bayar_opt_toggle
+                           " type="text" inputmode="numeric" class="form-control form-control-sm form-control-underline font-weight-bold text-right thousand"  >
+
+                    <div id="bayar_opt"  class="mt-1" data-bind="fadeVisible: bayar_opt_toggle" >
+                        <span data-bind="click: f_uang_pas" class="btn mb-1 btn-sm btn-primary" >UANG PAS</span>
+                        <span data-bind="click: f_uang_10" class="btn mb-1  btn-sm btn-primary" >10,000</span>
+                        <span data-bind="click: f_uang_20" class="btn mb-1   btn-sm btn-primary" >20,000</span>
+                        <span data-bind="click: f_uang_50" class="btn mb-1   btn-sm btn-primary" >50,000</span>
+                        <span data-bind="click: f_uang_100" class="btn mb-1   btn-sm btn-primary" >100,000</span>
+                    </div>
+                    
+
+                </div>  
+
+                <div class="form-group">
+                    <label for="kembalian" class="label2" >Kembalian</label>
+                    <input readonly="" data-bind="value:  kembalian" type="text" inputmode="numeric" class="form-control form-control-sm form-control-underline font-weight-bold text-right thousand"  >
+                </div>  
             </form>
         </div>
     </div>
+
+
+    <div class="row" style="display: none">
+        <div class="col-12 mb-1 mt-3 border-bottom">
+            <div class="form-check mb-2 text-center">
+                <input data-bind="checked: bayar_nanti" class="form-check-input" type="checkbox" id="bayar_nanti">
+                <label class="form-check-label" for="bayar_nanti">
+                    <b>Bayar Nanti</b>
+                </label>
+            </div>
+        </div>
+        <!--<div class="col-12 border-bottom" ></div>-->
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-12 mb-2 mt-2">
+            <b class="text-secondary" > Detail</b>
+        </div>
+        <div class="col-12 border-bottom" ></div>
+    </div>
+
+    <div class="row"  data-bind="foreach:cart" >
+        <div class="col-12 mt-3">
+            <div class="row mb-2 border-bottom">
+                <div class="col-3">
+                    <img src="#" data-bind="attr: {'src':foto}"  class="img-fluid">
+                </div>
+                <div class="col-7">
+                    <p> <span data-bind="text: nama_produk" ></span> </p>
+                    <p> <span class="text-danger" data-bind="text: total" ></span></p>
+                    <div class="input-group input-group-sm mb-1">
+                        <div class="input-group-prepend mr-1">
+                            <span data-bind="click: $root.minus_qty" class="btn btn-outline-danger plus-minus" ><i class="fa fa-minus"></i></span>
+                        </div>
+
+                        <input class="form-control form-control-underline text-center number" type="text" inputmode="decimal" data-bind="textInput: qty" >
+
+                        <div class="input-group-prepend ml-1">
+                            <span data-bind="click: $root.plus_qty" class="btn btn-outline-primary plus-minus" ><i class="fa fa-plus"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col-12" >
+                            <div class="form-check" >
+                                <input data-bind="checked: harga_disc,attr: {'id':id_element}" class="form-check-input" type="checkbox" >
+                                <label class="form-check-label font-size-10"  data-bind="attr: {'for':id_element}" >
+                                    Harga & Diskon
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div data-bind="visible: harga_disc" class="input-group input-group-sm mb-1">
+                        <div class="input-group-prepend">
+                            <span style="
+                                  width: 35px;
+                                  " class="input-group-text" > <b>@</b> </span>
+                        </div>
+                        <input class="form-control thousand" inputmode="decimal" type="text" data-bind="textInput:harga_produk" >
+                    </div>
+                    <div data-bind="visible: harga_disc" class="input-group input-group-sm mb-1">
+                        <div class="input-group-prepend">
+                            <span style="
+                                  width: 35px;
+                                  " class="input-group-text" > <b> % </b> </span>
+                        </div>
+                        <input class="form-control number" type="text" data-bind="textInput:disc" >
+                    </div>
+
+                </div>
+                <div class="col-2">
+                    <span data-bind="click: $root.delete_cart" class="mt-2 btn btn-outline-danger btn-sm"><i class="fa fa-trash" ></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" data-bind="visible: cart().length < 1" >
+        <div class="col-12" style="text-align: center" >
+            <h5>Belum Ada Produk Ditambahkan</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mt-5 border-bottom"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-3 mt-2">
+            <div class="row">
+                <div class="col-4">
+                    Sub
+                </div>
+                <div class="col-2">
+                    :
+                </div>
+                <div class="col-6 text-right text-danger">
+                    <span data-bind="text: sub_total" ></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 border-bottom" ></div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-3 mt-3">
+            <div class="row">
+                <div class="col-4">
+                    Diskon
+                </div>
+                <div class="col-2">
+                    :
+                </div>
+                <div class="col-6 text-right text-danger">
+                    <span data-bind="text: disc_total" ></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 border-bottom" ></div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-3 mt-3">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <select id="id_pajak"  class="form-control-sm form-control-underline" data-bind="value: id_pajak,
+                                            options: opt_pajak,
+                                            optionsText:'nama_pajak',
+                                            optionsValue:'id_pajak',
+                                            valueAllowUnset:true" >
+                        </select>
+                    </div>
+                </div>
+                <div class="col-2">
+                    :
+                </div>
+                <div class="col-6 text-right text-danger">
+                    <!--<input id="pajak_persen" type="text" data-bind="value: pajak_nominal" class="form-control-sm form-control-underline text-right thousand" >-->
+                    <span data-bind="text: pajak_nominal" ></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 border-bottom" ></div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-3 mt-3">
+            <div class="row">
+                <div class="col-4">
+                    Total
+                </div>
+                <div class="col-2">
+                    :
+                </div>
+                <div class="col-6 text-right text-danger">
+                    <span data-bind="text: total_all" ></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 border-bottom" ></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 mt-5 border-bottom"></div>
+    </div>
+
+    <div class="row mb-3 mt-5 border-top">
+        <div class="col-12 mt-3 pesan-akhir">
+            <div class="btn-group btn-group-sm d-flex" role="group" aria-label="Basic example">
+                <button id="kembali" class="btn btn-outline-primary  w-100" > <i class="fa fa-arrow-circle-left"></i> Kembali </button>
+                <button id="batal" class="btn btn-outline-danger  w-100" > <i class="fa fa-close"></i> Batal </button>
+                <button  data-bind="disable: cart().length < 1 "  id="simpan" class="btn btn-primary  w-100" > <i class="fa fa-check-circle"></i> Simpan </button>
+            </div>
+        </div>
+    </div>
+
+    <textarea id="ko_output" style="display: none" data-bind="value: ko.toJSON($root)" ></textarea>
+
 </div>
-
-<script>
-    $('#daftar_pesanan').ready(function () {
-        var cart_json = localStorage.getItem('cart');
-        console.log(JSON.parse(cart_json));
-    });
-
-</script>
+<script src="page/pesan/pesan_proses.js" ></script>

@@ -49,7 +49,6 @@ function produk_cart_row(id_produk, sku, nama_produk, harga_produk, foto, qty, d
 
         return float_to_currency(total);
     });
-
 }
 
 function kategori_row(id_kategori, nama_kategori) {
@@ -74,6 +73,24 @@ function Module_pesan() {
     self.cart_dont_show_again = ko.observable(false);
     self.cart = ko.observableArray([]);
 
+    self.update_cart_session = function () {
+        var cart_sess = ko.toJSON(self);
+        localStorage.setItem('cart', cart_sess);
+    }
+
+    self.produk_list_add = function (element, index, data) {
+        if (element.nodeType === 1) {
+            $(element).css('opacity', 0);
+            var interval = (($(element).index() + 1) * 100);
+
+            setTimeout(function () {
+                $(element).animate({opacity: 1});
+            }, interval);
+        }
+
+        self.update_cart_session();
+    };
+
     self.qount_cart = ko.computed(function () {
         var total = 0;
 
@@ -94,6 +111,8 @@ function Module_pesan() {
 
             }
         }
+        self.update_cart_session();
+
     }
 
     self.plus_qty = function (row) {
@@ -103,20 +122,22 @@ function Module_pesan() {
                 self.cart()[i].qty(qty);
             }
         }
+
+        self.update_cart_session();
+
     }
 
 
     self.clear_nama_produk = function () {
+        self.nama_produk('');
         self.produk_list([]);
         self.limit(5);
         self.start(0);
-        $("#loading").show();
         self.load_data();
-        $("#loading").hide();
-
     }
 
     self.clear_id_kategori = function () {
+        self.id_kategori('');
         self.produk_list([]);
         self.limit(5);
         self.start(0);
@@ -124,11 +145,11 @@ function Module_pesan() {
     }
 
     self.load_data = function () {
-        var url = localStorage.getItem('hostname') + '/produk';
+        var url = localStorage.getItem('hostname') + '/produk/produk';
         var url_foto = localStorage.getItem('hostname_foto');
 
-        var username = localStorage.getItem('username');
-        var password = localStorage.getItem('password');
+
+        var token = localStorage.getItem('token');
         var nama_produk = self.nama_produk();
         var id_kategori = self.id_kategori();
         var limit = self.limit();
@@ -139,8 +160,7 @@ function Module_pesan() {
             type: 'post',
             crossDomain: true,
             data: {
-                'username': username,
-                'password': password,
+                'token': token,
                 'nama_produk': nama_produk,
                 'id_kategori': id_kategori,
                 'start': start,
@@ -150,39 +170,44 @@ function Module_pesan() {
                 if (data.status) {
                     var result = [];
                     result = data.data;
-                    
-                    if(result.length<1){
-                        self.start(start-limit);
+
+                    if (result.length < 1) {
+                        self.start(start - limit);
                     }
 
-                    //produk_row(id_produk, sku,nama_produk, harga_produk) {
                     var row = [];
                     var foto = '';
                     for (var i = 0; i < result.length; i++) {
                         row = result[i];
-                        foto = url_foto + '/' + row.foto;
+                        foto = url_foto + '' + row.foto;
                         self.produk_list.push(new produk_row(row.id_produk, row.sku, row.nama_produk, row.harga, foto));
                     }
+                }else{
+                    alert(data.message);
                 }
             }, error: function (err) {
+
+                if (confirm("Koneksi Gagal Coba lagi ?")) {
+                    txt = "Ya";
+                    self.load_data();
+                } else {
+                    txt = "Tidak";
+                }
             }
 
         });
     }
 
     self.load_kategori = function () {
-        var url = localStorage.getItem('hostname') + '/produk/kategori';
-
-        var username = localStorage.getItem('username');
-        var password = localStorage.getItem('password');
+        var url = localStorage.getItem('hostname') + '/produk/produk/kategori';
+        var token = localStorage.getItem('token');
 
         $.ajax({
             url: url,
             type: 'post',
             crossDomain: true,
             data: {
-                'username': username,
-                'password': password,
+                'token': token,
             },
             success: function (data) {
                 if (data.status) {
@@ -193,6 +218,15 @@ function Module_pesan() {
                         row = result[i];
                         self.opt_kategori.push(new kategori_row(row.id_kategori, row.nama_kategori));
                     }
+                }else{
+                    alert(data.message);
+                }
+            }, error: function (err) {
+                if (confirm("Koneksi Gagal Coba lagi ?")) {
+                    txt = "Ya";
+                    self.load_kategori();
+                } else {
+                    txt = "Tidak";
                 }
             }
         });
@@ -256,8 +290,34 @@ function Module_pesan() {
 
     }
 
+    self.check_cart_available = function () {
+        var cart_json = localStorage.getItem('cart');
+
+        var cart_parsed = [];
+        var cart_arr = [];
+
+        try {
+            cart_parsed = JSON.parse(cart_json);
+            cart_arr = cart_parsed.cart;
+        } catch (e) {
+            console.log(e);
+        }
+
+        if (cart_arr.length > 0) {
+            var row = null;
+            for (var i = 0; i < cart_arr.length; i++) {
+                row = cart_arr[i];
+//                self.cart.push(new produk_cart_row(id_produk, sku, nama_produk, harga_format, foto, 1, 0));
+                self.cart.push(new produk_cart_row(row.id_produk, row.sku, row.nama_produk, row.harga_produk, row.foto, row.qty, row.disc));
+
+            }
+        }
+
+    }
+
     self.delete_cart = function (row) {
         self.cart.remove(row);
+        self.update_cart_session();
     }
 
     self.sub_total = ko.computed(function () {
@@ -296,12 +356,14 @@ function Module_pesan() {
 
         output = curency_to_float(self.sub_total()) - curency_to_float(self.disc_total());
 
-        return float_to_currency(output);
-    })
 
-    self.opt_kategori.push(new kategori_row('', 'Semua Kategori...'));
+        return float_to_currency(output);
+    });
+
+//    self.opt_kategori.push(new kategori_row('', 'Semua Kategori...'));
     self.load_kategori();
     self.load_data();
+    self.check_cart_available();
 
 }
 
@@ -347,8 +409,6 @@ $('#modul_pesan').ready(function () {
         $('#cart-modal').modal('hide');
 
         $('#cart-modal').on('hidden.bs.modal', function (e) {
-            // do something...
-
             var json = $('#daftar_pesanan').val();
             localStorage.setItem('cart', json);
 
@@ -356,8 +416,6 @@ $('#modul_pesan').ready(function () {
                 $('#content').html(data);
             });
         });
-
-
     });
 
     toastr.options.onShown = function () {
