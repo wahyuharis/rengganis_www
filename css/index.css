@@ -16,6 +16,8 @@
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    width: 100%;
+    
     /*text-align:center;*/
 }
 
@@ -288,7 +290,7 @@ body{
 }
 
 .modal-footer{
-   position: sticky;
+    position: sticky;
     z-index: 9999;
     bottom: 0px;
     width: 100%;
@@ -323,7 +325,22 @@ body{
     left: 5px;
     margin-top: 1px;
     /* border: 1px solid #ccc; */
-    background: url(../img/blth.png);
+    background: url(../img/blth.svg);
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    filter: invert(1);
+}
+
+#profile-container {
+    height: 120px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+#img-profile{
+    border-radius: 35px;
+    width: 50px;
+    height: 50px;
 }

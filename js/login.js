@@ -1,9 +1,24 @@
 var hostname = glob_hostname;
 
 
-$('#login').ready(function () {
+//document.addEventListener('deviceready', onDeviceReady, false);
+
+$(document).ready(function () {
+
+    onDeviceReady();
+
+});
+
+//$('#login').ready(function () {
+////    onDeviceReady();
+//});
+
+
+function onDeviceReady() {
     var username = '';
     var password = '';
+
+    is_login();
 
     $('#form_login').submit(function (e) {
         e.preventDefault();
@@ -17,6 +32,11 @@ $('#login').ready(function () {
     });
 
     function login(username, password) {
+
+        var loading = new SubmitLoading();
+        loading.set_attr('#login_submit');
+        loading.write();
+
         $.ajax({
             url: hostname + 'auth/auth/login',
             type: 'post',
@@ -33,6 +53,7 @@ $('#login').ready(function () {
                     localStorage.setItem('id_usaha', data.id_usaha);
                     localStorage.setItem('id_outlet', data.id_outlet);
                     localStorage.setItem('usaha', JSON.stringify(data.usaha));
+                    localStorage.setItem('outlet', JSON.stringify(data.outlet));
                     localStorage.setItem('user', JSON.stringify(data.user));
 
                     window.location.href = 'dash.html';
@@ -46,6 +67,10 @@ $('#login').ready(function () {
                 } else {
                     alert(result.message);
                 }
+                loading.rewrite();
+            }, error(err) {
+                alert('koneksi gagal periksa koneksi anda' + "\n" + JSON.stringify(err));
+                loading.rewrite();
             }
         });
     }
@@ -68,6 +93,7 @@ $('#login').ready(function () {
                     localStorage.setItem('id_usaha', data.id_usaha);
                     localStorage.setItem('id_outlet', data.id_outlet);
                     localStorage.setItem('usaha', JSON.stringify(data.usaha));
+                    localStorage.setItem('outlet', JSON.stringify(data.outlet));
                     localStorage.setItem('user', JSON.stringify(data.user));
 
 //                    console.log(data);
@@ -75,9 +101,14 @@ $('#login').ready(function () {
                 } else {
                     alert(result.message);
                 }
+            }, error(err) {
+                alert('koneksi gagal periksa koneksi anda' + "\n" + JSON.stringify(err));
+                loading.rewrite();
             }
         });
     }
+
+
 
 
     $('#show-hide-pass').click(function () {
@@ -92,4 +123,38 @@ $('#login').ready(function () {
 
     });
 
-});
+}
+
+function is_login() {
+    var token = localStorage.getItem('token');
+
+    $.ajax({
+        url: hostname + 'auth/auth/is_login',
+        type: 'post',
+        crossDomain: true,
+        data: {
+            'token': token
+        },
+        success: function (result) {
+            data = result.data;
+            if (result.status) {
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('id_usaha', data.id_usaha);
+                localStorage.setItem('id_outlet', data.id_outlet);
+                localStorage.setItem('usaha', JSON.stringify(data.usaha));
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+//                    console.log(data);
+                window.location.href = 'dash.html';
+            } else {
+//                alert(result.message);
+            }
+        }, error(err) {
+            alert('koneksi gagal periksa koneksi anda' + "\n" + JSON.stringify(err));
+            loading.rewrite();
+        }
+    });
+}
+
+

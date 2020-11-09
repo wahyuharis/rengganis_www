@@ -394,6 +394,10 @@ ko.bindingHandlers.fadeVisible = {
 };
 
 $('#daftar_pesanan').ready(function () {
+    $('#title').html('Transaksi - Pembayaran');
+    
+    is_login();
+    
     $(window).scrollTop(0);
 
     var cart_json = localStorage.getItem('cart');
@@ -407,6 +411,13 @@ $('#daftar_pesanan').ready(function () {
             $('#content').html(data);
         });
     });
+
+    document.addEventListener("backbutton", onBackKeyDown, false);
+    function onBackKeyDown() {
+        $.get('page/pesan/pesan.html', function (data) {
+            $('#content').html(data);
+        });
+    }
 
     $('#batal').click(function () {
 
@@ -429,6 +440,8 @@ $('#daftar_pesanan').ready(function () {
     function save() {
         var data = $('#ko_output').val();
         var data_arr = JSON.parse(data);
+        
+        console.log(data);
 
 
         var url = localStorage.getItem('hostname') + 'penjualan/penjualan/submit/';
@@ -451,6 +464,7 @@ $('#daftar_pesanan').ready(function () {
 
                     console.log(result);
                     localStorage.setItem('id_penjualan', result.data.id_penjualan);
+                    localStorage.setItem('cart', null);
 
 
                     $.get('page/pesan/detail.html', function (data) {
@@ -488,3 +502,31 @@ $('#daftar_pesanan').ready(function () {
     });
 
 });
+
+
+
+function is_login() {
+    var token = localStorage.getItem('token');
+    var hostname = localStorage.getItem('hostname');
+
+    $.ajax({
+        url: hostname + 'auth/auth/is_login',
+        type: 'post',
+        crossDomain: true,
+        data: {
+            'token': token
+        },
+        success: function (result) {
+            data = result.data;
+            if (result.status) {
+                //pass
+            } else {
+                alert(result.message);
+                window.location.href = 'index.html';
+            }
+        }, error(err) {
+            alert('koneksi gagal periksa koneksi anda' + "\n" + JSON.stringify(err));
+            loading.rewrite();
+        }
+    });
+}

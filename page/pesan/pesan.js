@@ -70,7 +70,7 @@ function Module_pesan() {
     self.start = ko.observable(0);
     self.limit = ko.observable(5);
 
-    self.cart_dont_show_again = ko.observable(false);
+    self.cart_dont_show_again = ko.observable(true);
     self.cart = ko.observableArray([]);
 
     self.update_cart_session = function () {
@@ -182,7 +182,7 @@ function Module_pesan() {
                         foto = url_foto + '' + row.foto;
                         self.produk_list.push(new produk_row(row.id_produk, row.sku, row.nama_produk, row.harga, foto));
                     }
-                }else{
+                } else {
                     alert(data.message);
                 }
             }, error: function (err) {
@@ -218,7 +218,7 @@ function Module_pesan() {
                         row = result[i];
                         self.opt_kategori.push(new kategori_row(row.id_kategori, row.nama_kategori));
                     }
-                }else{
+                } else {
                     alert(data.message);
                 }
             }, error: function (err) {
@@ -367,9 +367,11 @@ function Module_pesan() {
 
 }
 
-
-
 $('#modul_pesan').ready(function () {
+    is_login();
+    
+    $('#title').html('Transaksi - Pilih Produk');
+
     ko.applyBindings(new Module_pesan(), document.getElementById("modul_pesan"));
 
     $(window).scroll(function () {
@@ -381,9 +383,7 @@ $('#modul_pesan').ready(function () {
             var context = ko.contextFor(document.getElementById("modul_pesan"));
             context.$data.scroll_bottom();
         } else {
-
             // element has gone out of viewport
-
         }
     });
 
@@ -399,6 +399,12 @@ $('#modul_pesan').ready(function () {
     mc.on("swipeup", function () {
         $('#cart-modal').modal('hide');
     });
+
+    document.addEventListener("backbutton", onBackKeyDown, false);
+    function onBackKeyDown() {
+        $('#cart-modal').modal('hide');
+    }
+
 
     $('#cart-btn').click(function () {
         $('#cart-modal').modal('show');
@@ -428,5 +434,31 @@ $('#modul_pesan').ready(function () {
         });
     }
 
+
 });
 
+function is_login() {
+    var token = localStorage.getItem('token');
+    var hostname = localStorage.getItem('hostname');
+
+    $.ajax({
+        url: hostname + 'auth/auth/is_login',
+        type: 'post',
+        crossDomain: true,
+        data: {
+            'token': token
+        },
+        success: function (result) {
+            data = result.data;
+            if (result.status) {
+                //pass
+            } else {
+                alert(result.message);
+                window.location.href = 'index.html';
+            }
+        }, error(err) {
+            alert('koneksi gagal periksa koneksi anda' + "\n" + JSON.stringify(err));
+            loading.rewrite();
+        }
+    });
+}

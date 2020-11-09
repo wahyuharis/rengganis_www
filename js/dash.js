@@ -5,43 +5,6 @@ $(document).ready(function () {
 
 });
 
-function init_localstorage() {
-    var hostname = glob_hostname;
-    var hostname_foto = glob_hostname_foto;
-    var hostname_other = glob_hostname_other;
-
-
-    localStorage.setItem('hostname', hostname);
-    localStorage.setItem('hostname_foto', hostname_foto);
-    localStorage.setItem('hostname_other', hostname_other);
-
-
-//    localStorage.setItem('mac_address_printer', null);
-
-}
-
-function get_usaha() {
-    var url = localStorage.getItem('hostname') + 'usaha/';
-    var token = localStorage.getItem('token');
-
-    $.ajax({
-        url: url,
-        type: 'post',
-        crossDomain: true,
-        data: {
-            'token': token,
-        }, success: function (result) {
-
-        }, error: function (err) {
-            if (confirm("Koneksi Gagal Coba lagi ?")) {
-                txt = "Ya";
-                get_usaha();
-            } else {
-                txt = "Tidak";
-            }
-        }
-    });
-}
 
 function onDeviceReady() {
     init_localstorage();
@@ -75,6 +38,24 @@ function onDeviceReady() {
         }
     });
 
+
+//    document.addEventListener("touchstart", handleStart, false);
+//    document.addEventListener("touchend", handleEnd, false);
+//    document.addEventListener("touchcancel", handleCancel, false);
+//    document.addEventListener("touchmove", handleMove, false);
+//
+//    function handleStart(ev) {
+//        console.log(ev);
+//    }
+//    function handleEnd(ev) {
+//        console.log(ev);
+//    }
+//    function handleCancel(ev) {
+//        console.log(ev);
+//    }
+//    function handleMove(ev) {
+//        console.log(ev.touches[0]);
+//    }
 
 
     $('#printer').click(function () {
@@ -118,9 +99,63 @@ function onDeviceReady() {
     });
 
 
-
+    set_profile_usaha();
 
 }
+
+function init_localstorage() {
+    var hostname = glob_hostname;
+    var hostname_foto = glob_hostname_foto;
+    var hostname_other = glob_hostname_other;
+
+
+    localStorage.setItem('hostname', hostname);
+    localStorage.setItem('hostname_foto', hostname_foto);
+    localStorage.setItem('hostname_other', hostname_other);
+}
+
+function set_profile_usaha() {
+    var usaha = localStorage.getItem('usaha');
+    usaha_arr = JSON.parse(usaha);
+//    console.log(usaha_arr);
+    var outlet = localStorage.getItem('outlet');
+    outlet_arr = JSON.parse(outlet);
+
+
+    var foto_usaha = localStorage.getItem('hostname_other') + '/logo_usaha/' + usaha_arr.logo;
+    console.log(usaha_arr);
+    
+
+    $('#img-profile').attr('src', foto_usaha);
+    $('#label_1').html(usaha_arr.nama_usaha);
+    $('#label_2').html(outlet_arr.nama_outlet + " - "+ outlet_arr.kota );
+
+}
+
+
+function get_usaha() {
+    var url = localStorage.getItem('hostname') + 'usaha/';
+    var token = localStorage.getItem('token');
+
+    $.ajax({
+        url: url,
+        type: 'post',
+        crossDomain: true,
+        data: {
+            'token': token,
+        }, success: function (result) {
+
+        }, error: function (err) {
+            if (confirm("Koneksi Gagal Coba lagi ?")) {
+                txt = "Ya";
+                get_usaha();
+            } else {
+                txt = "Tidak";
+            }
+        }
+    });
+}
+
 
 toastr.options = {
     "closeButton": false,
@@ -144,14 +179,26 @@ toastr.options = {
 
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "100%";
-    $('#menu-container').show('slow');
+    document.getElementById("mySidenav").style.left = "0";
+//    $('#menu-container').animate({opacity: 1}, 1000);
+//    $('#profile-container').animate({opacity: 1}, 1000);
+//    var width = $(window).width();
+//    alert(width);
+
+//    $('#mySidenav').animate({left: 0}, 5);
+
 }
 
 function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    $('#menu-container').hide();
+//    $('#menu-container').css('opacity',0);
+//    $('#profile-container').css('opacity',0);
+    document.getElementById("mySidenav").style.left = "-100%";
+//    $('#mySidenav').animate({left: -100}, 1000);
+//    var width = $(window).width();
+//    var left2=width * -1;
+//    alert(width);
 
+//    $('#mySidenav').animate({left: '-100%'}, 5);
 }
 
 
